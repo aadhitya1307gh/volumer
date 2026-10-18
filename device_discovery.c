@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <pipewire/pipewire.h>
 
 // This callback runs every time PipeWire sees an object on the system
@@ -22,9 +23,15 @@ static void registry_global(void *data, uint32_t id, uint32_t permissions,
     }
 }
 
+//Runs when any global object is removed from the system
+static void registry_global_remove(void *data, uint32_t id){
+	printf("[Disconnected] Object ID: %u has been removed from the system.\n", id);
+};
+
 static const struct pw_registry_events registry_events = {
     .version = PW_VERSION_REGISTRY,
     .global = registry_global,
+    .global_remove = registry_global_remove, 
 };
 
 int main(int argc, char *argv[]) {
